@@ -5,23 +5,31 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
+
   data() {
     return {
       loading: true,
       // todo: include relevant data
     }
   },
+  computed: {
+    ...mapState('app/Example', {
+      objects: state => state.objects
+    })
+  },
   created() {
-    this.fetchData()
+    //this.destroy()
   },
   watch: {
-    '$route': 'fetchData',
+    //'$route': 'destroy',
   },
   methods: {
-    fetchData() {
-      // todo: customize fetchdata logic
-    },
+    ...mapActions('app/Example', [
+      'destroy'
+    ])
   },
 }
 

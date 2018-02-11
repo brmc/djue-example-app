@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const BASEURL = 'http://localhost:8000'
 
 let config = {
@@ -21,7 +23,14 @@ let config = {
 }
 
 export default {
-  get(url, mutation,) {
-
-  }
+  get (url) {
+    return axios.get(url, config)
+  },
+  post (url, payload) {
+    return axios.post(url, payload, config)
+  },
+  destroy () {},
+  put (url, payload) {
+    return axios.put(url + '/', payload, config)
+  },
 }

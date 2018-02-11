@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-if="error">{{error}}</li>
+      <li v-if="error">{{ error }}</li>
       <li v-if="!urls">...loading</li>
       <li v-else="" v-for="(url, name) in urls">
         <router-link :to="url">{{ name }}</router-link>

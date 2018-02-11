@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import APIRootView from './modules/rest_framework/views/APIRootView'
+  import APIRootView from './modules/rest_framework/components/APIRootView'
 
   export default {
     components: {APIRootView},

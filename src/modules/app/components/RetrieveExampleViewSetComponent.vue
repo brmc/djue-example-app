@@ -1,29 +1,37 @@
 <template>
-<div>
-  
-</div>
+  <div>
+    <div v-if="!object">...loading</div>
+    <div v-else v-for="(_, field) in fields">{{ field }}: {{ object[field].value }} </div>
+  </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      loading: true,
-      // todo: include relevant data
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  watch: {
-    '$route': 'fetchData',
-  },
-  methods: {
-    fetchData() {
-      // todo: customize fetchdata logic
+  import { mapState, mapActions } from 'vuex'
+
+  export default {
+
+    data () {
+      return {}
     },
-  },
-}
+    computed: {
+      ...mapState('app/Example', {
+        object: state => state.objects.active,
+        fields: state => state.fields,
+      }),
+    },
+    created () {
+      this.retrieve(this.$route.path)
+    },
+    destroyed () {
+      this.removeActiveObject()
+    },
+    methods: {
+      ...mapActions('app/Example', [
+        'retrieve',
+        'removeActiveObject'
+      ]),
+    },
+  }
 
 </script>
 
