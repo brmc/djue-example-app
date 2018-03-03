@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
-import routes from './modules/app/routes'
 import store from './store/root'
+import router from './router'
 
 Vue.use(Router)
 
@@ -12,14 +12,11 @@ if (!window.location.origin) {
       (window.location.port ? ':' + window.location.port : '')
 }
 
-let router = new Router({
-  routes: routes,
-})
-
 new Vue({
   el: '#app',
   router,
   store,
   ...App,
 })
+
 window.store = store

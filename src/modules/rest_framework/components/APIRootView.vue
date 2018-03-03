@@ -24,7 +24,7 @@
       this.fetchData()
     },
     watch: {
-      '$route': 'fetchData',
+      //'$route': 'fetchData',
     },
     methods: {
       fetchData () {

@@ -3,8 +3,10 @@
     <div id="app">
       <a-p-i-root-view/>
     </div>
-    <router-view name="nav"></router-view>
-    <router-view></router-view>
+    <div class="grid">
+      <router-view name="nav"></router-view>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -25,5 +27,10 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+  }
+  .grid {
+    display: grid;
+    grid-auto-columns: auto auto;
+    grid-auto-flow: column;
   }
 </style>

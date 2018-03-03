@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import router from '../router'
 const BASEURL = 'http://localhost:8000'
 
 let config = {
@@ -22,15 +22,37 @@ let config = {
   },
 }
 
+function buildPath(stuff) {
+  if (typeof stuff === 'string') {
+    return stuff
+  }
+
+  if (typeof stuff !== 'object') {
+    throw "You're trying to build a path from stupid stuff. You need to pass "
+  }
+
+  // .resolve() throws an error due to property descriptor limitations
+  // so a clone is necessary
+  const clone = Object.assign({}, stuff)
+
+  return router.resolve(clone).location.path
+}
+
 export default {
   get (url) {
+    url = buildPath(url)
     return axios.get(url, config)
   },
   post (url, payload) {
+    url = buildPath(url)
     return axios.post(url, payload, config)
   },
-  destroy () {},
+  destroy (url) {
+    url = buildPath(url)
+    return axios.delete(url, config)
+  },
   put (url, payload) {
-    return axios.put(url + '/', payload, config)
+    url = buildPath(url)
+    return axios.put(url, payload, config)
   },
 }

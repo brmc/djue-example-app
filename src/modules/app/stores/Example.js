@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import MaxLengthValidator from '../../../validators/MaxLengthValidator'
-import { list, create, retrieve, destroy, update, removeActiveObject } from '../../../store/curdl'
+import {
+  list,
+  create,
+  retrieve,
+  destroy,
+  update,
+  softCommit,
+  resetNew,
+} from '../../../store/curdl'
 
 const state = {
   objects: {
@@ -38,9 +46,9 @@ const state = {
 }
 
 const getters = {
-  getActiveOrNew(state) {
+  getActiveOrNew (state) {
     return state.objects.active || state.objects.new
-  }
+  },
 
 }
 
@@ -50,56 +58,8 @@ const actions = {
   retrieve,
   destroy,
   update,
-  removeActiveObject,
-  validate ({commit, state}, object) {
-    let errors = {}
-    let isValid = true
-    for (const [name, value] of object) {
-      let messages = []
-      for (let validator of state.fields[name].validators) {
-        validator = new validator(value)
-
-        if (validator.isValid()) {
-          continue
-        }
-        isValid = false
-        messages.push(validator.message)
-      }
-
-      if (messages.length === 0) {
-        continue
-      }
-      errors[name] = messages
-    }
-
-    if (isValid) {
-      commit('ACCEPT_CHANGES', {object})
-    } else {
-      commit('REJECT_CHANGES', {object, errors})
-    }
-  },
-  revert ({commit, state}, object) {
-    const master = state.getMaster(object.id)
-
-    commit('SET_STATE', master)
-  },
-  object ({commit, state}, id) {
-    return state.object.all[id]
-  },
-  save ({commit, state}, object) {
-    commit('ACCEPT_CHANGES', {object})
-  },
-
-  remove () {
-    this.$store.commit('MODEL_EXAMPLE_DELETE')
-  },
-
-  revert () {
-    this.$store.dispatch('MODEL_EXAMPLE_REVERT')
-  },
-  load ({commit, state}, object) {
-    commit('LOAD_ALL', object)
-  },
+  softCommit,
+  resetNew,
 }
 
 const mutations = {
@@ -118,8 +78,9 @@ const mutations = {
 
     state.objects.all[object.id] = object
   },
-  LOAD_ALL (state, objects) {
-    let data = []
+  LOAD_ALL (state, response) {
+    let objects = response.data
+    let data = {}
     for (let obj of objects) {
       let inner = {}
       for (let key of Object.getOwnPropertyNames(obj)) {
@@ -128,12 +89,14 @@ const mutations = {
           errors: [],
         }
       }
-      data.push(inner)
+      data[obj.id] = inner
     }
+    let clone = Object.assign({}, data)
     Vue.set(state.objects, 'all', data)
-    Vue.set(state.objects, 'master', data)
+    Vue.set(state.objects, 'master', clone)
   },
-  LOAD_ONE (state, object) {
+  LOAD_ONE (state, response) {
+    let object = response.data
     let data = {}
     for (let key of Object.getOwnPropertyNames(object)) {
       data[key] = {
@@ -142,18 +105,33 @@ const mutations = {
       }
     }
 
-    Vue.set(state.objects, 'active', data)
+    state.objects.active = data
     Vue.set(state.objects.all, data.id.value, data)
     Vue.set(state.objects.master, data.id.value, data)
   },
-  CREATE (state, data) {
-    Vue.set(state.objects, 'active', data)
+  CREATE (state, response) {
+    let data = response.data
+    state.objects.active = data
     Vue.set(state.objects.all, data.id.value, data)
     Vue.set(state.objects.master, data.id.value, data)
+  },
+  REMOVE (state, response) {
+    let data = response.data
+    delete state.objects.all[state.objects.active.id.value]
+    delete state.objects.master[state.objects.active.id.value]
+    state.objects.active = null
+    this.$router.back()
   },
   REMOVE_ACTIVE_OBJECT (state) {
-    Vue.set(state.objects, 'active', null)
-  }
+    Vue.set(state.objects.all, state.objects.active.id.value,
+        state.objects.active)
+    state.objects.active = null
+  },
+  RESET_NEW (state) {
+    for (let [name, field] of Object.entries(state.objects.new)) {
+      Vue.set(field, 'value', null)
+    }
+  },
 }
 
 export default {

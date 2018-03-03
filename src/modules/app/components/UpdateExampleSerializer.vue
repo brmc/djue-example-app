@@ -1,34 +1,32 @@
 <template>
   <div>
     <form action="." method="post">
-      <div v-if="loading">...Loading</div>
+      <div v-if="!object">...Loading</div>
       <div v-else="">
         <p>
-          <label for="id_name">Name:</label>
-          <input type="text" name="name" v-model="name.value" maxlength="50"
+          <!--<label for="id_name">Name:</label>-->
+          <input placeholder="Name" type="text" name="name"
+                 v-model="object.name.value" maxlength="50"
                  required id="id_name"/>
-        <div v-if="name.errors">
-          <div v-for="error in name.errors">
+        <div v-if="object.name.errors">
+          <div v-for="error in object.name.errors">
             {{ error }}
           </div>
         </div>
         </p>
-        <p><label for="id_description">Description:</label>
-          <textarea name="description" cols="40" rows="10" required
+        <p><!--<label for="id_description">Description:</label>-->
+          <textarea placeholder="Description" name="description" cols="40"
+                    rows="10" required
                     id="id_description"
-                    v-model="description.value"></textarea>
-        <div v-if="description.errors">
-          <div v-for="error in description.errors">
-
+                    v-model="object.description.value"></textarea>
+        <div v-if="object.description.errors">
+          <div v-for="error in object.description.errors">
             {{ error }}
-
           </div>
         </div>
         </p>
 
-        <input type='button' @click="back" value="back"/>
         <input type='button' @click="save" value="Save"/>
-        <input v-if="id" type='button' @click="remove" value="Delete"/>
         <input type='button' @click="revert" value="Revert"/>
       </div>
     </form>
@@ -41,59 +39,51 @@
   export default {
     data () {
       return {
-        loading: true,
         name: null,
         description: null,
+        confirmDelete: false,
       }
     },
     computed: {
       ...mapState('app/Example', {
         'fields': 'fields',
-        object: state => state.objects.active
+        object: state => state.objects.active,
       }),
+      routeDescription () {
+        return {
+          name: 'example-detail',
+          params: {
+            pk: this.object.id.value,
+          },
+        }
+      },
     },
     created () {
-      console.log('obj', this.object)
-      if (this.object !== null) {
+      if (!this.object) {
         return
       }
 
-      this.retrieve(this.$route.path)
-          .catch(err => {debugger})
-          .then((a, b, c) => {
-            this.loading = false
-            Object.assign(this, this.object)
-          })
+      this.retrieve(this.routeDescription)
     },
     methods: {
       ...mapActions('app/Example', [
-        'retrieve',
         'update',
+        'retrieve',
       ]),
-      back () {
-        this.$router.back()
-      },
       save () {
         const payload = {}
         for (const [name, _] of Object.entries(this.fields)) {
-          payload[name] = this[name].value
+          payload[name] = this.object[name].value
         }
 
-        this.update({url: this.$route.path, payload: payload})
+        this.update({url: this.routeDescription, payload: payload})
       },
-
-      remove () {
-        this.$store.commit('MODEL_EXAMPLE_DELETE')
-      },
-
       revert () {
         this.$store.dispatch('MODEL_EXAMPLE_REVERT')
       },
     },
   }
-
 </script>
 
 <style>
-
 </style>

@@ -1,7 +1,9 @@
 <template>
   <div>
     <div v-if="!object">...loading</div>
-    <div v-else v-for="(_, field) in fields">{{ field }}: {{ object[field].value }} </div>
+    <div v-else v-for="(_, field) in fields">{{ field }}: {{
+      object[field].value }}
+    </div>
   </div>
 </template>
 
@@ -20,15 +22,15 @@
       }),
     },
     created () {
-      this.retrieve(this.$route.path)
+//      this.removeActiveObject()
     },
     destroyed () {
-      this.removeActiveObject()
+      //this.removeActiveObject()
     },
     methods: {
       ...mapActions('app/Example', [
         'retrieve',
-        'removeActiveObject'
+        'removeActiveObject',
       ]),
     },
   }

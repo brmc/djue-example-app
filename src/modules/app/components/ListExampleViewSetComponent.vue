@@ -10,11 +10,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Vue from 'vue'
 
 export default {
 
   data() {
     return {
+
       loading: true,
 
       // todo: include relevant data
@@ -24,13 +26,20 @@ export default {
     ...mapState('app/Example', {
       objects: state => state.objects
     }),
+    routeDescription() {
+      return {
+        name: 'example-list',
+      }
+    }
   },
   created() {
-    console.log(this)
-    this.list(this.$route.path)
+    console.log("Suck dick")
+    let a = Vue
+
+    this.list(this.routeDescription)
   },
   watch: {
-    '$route': 'list',
+    //'$route': 'list',
   },
   methods: {
     getPath(object) {

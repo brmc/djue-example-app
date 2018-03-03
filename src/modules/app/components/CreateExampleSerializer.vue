@@ -1,24 +1,29 @@
 <template>
   <div>
-    <form action="." method="post">
-      <div v-if="loading">...Loading</div>
-      <div v-else="">
+    <div v-if="created">
+      <div>{{ successMessage }}</div>
+      <a href="#" @click="createAnother">Create another?</a>
+    </div>
+    <form v-else action="." method="post">
+      <div>
         <p>
-          <label for="id_name">Name:</label>
-          <input type="text" name="name" v-model="name.value" maxlength="50"
+          <!--<label for="id_name">Name:</label>-->
+          <input placeholder="Name" type="text" name="name"
+                 v-model="object.name.value" maxlength="50"
                  required id="id_name"/>
-        <div v-if="name.errors">
-          <div v-for="error in name.errors">
+        <div v-if="object.name.errors">
+          <div v-for="error in object.name.errors">
             {{ error }}
           </div>
         </div>
         </p>
-        <p><label for="id_description">Description:</label>
-          <textarea name="description" cols="40" rows="10" required
+        <p><!--<label for="id_description">Description:</label>-->
+          <textarea placeholder="Description" name="description" cols="40"
+                    rows="10" required
                     id="id_description"
-                    v-model="description.value"></textarea>
-        <div v-if="description.errors">
-          <div v-for="error in description.errors">
+                    v-model="object.description.value"></textarea>
+        <div v-if="object.description.errors">
+          <div v-for="error in object.description.errors">
 
             {{ error }}
 
@@ -27,7 +32,6 @@
         </p>
 
         <input type='button' @click="save" value="Save"/>
-        <input v-if="id" type='button' @click="remove" value="Delete"/>
         <input type='button' @click="revert" value="Revert"/>
       </div>
     </form>
@@ -40,9 +44,8 @@
   export default {
     data () {
       return {
-        loading: true,
-        name: null,
-        description: null,
+        created: false,
+        successMessage: 'Object created successfully!',
       }
     },
     computed: {
@@ -51,21 +54,28 @@
         object: state => state.objects.new,
       }),
     },
-    created () {
-      this.loading = false
-      Object.assign(this, this.object)
-    },
     methods: {
       ...mapActions('app/Example', [
         'create',
+        'resetNew',
       ]),
+      createAnother () {
+        this.resetNew()
+        this.created = false
+      }
+      ,
       save () {
         const payload = {}
         for (const [name, _] of Object.entries(this.fields)) {
-          payload[name] = this[name].value
+          payload[name] = this.object[name].value
         }
 
         this.create({url: this.$route.path, payload: payload})
+            .then(response => {
+              if (response.status === 201) {
+                this.created = true
+              }
+            })
       },
 
       remove () {
