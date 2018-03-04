@@ -20,9 +20,4 @@ export default [{
     default: ExampleViewSetInstance
   },
   name: 'example-detail',
-}, {
-  path: '/',
-  pathToRegexpOptions: {strict: true},
-  component: APIRootView,
-  name: 'api-root',
 }];
