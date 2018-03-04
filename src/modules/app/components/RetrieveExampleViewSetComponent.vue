@@ -21,12 +21,6 @@
         fields: state => state.fields,
       }),
     },
-    created () {
-//      this.removeActiveObject()
-    },
-    destroyed () {
-      //this.removeActiveObject()
-    },
     methods: {
       ...mapActions('app/Example', [
         'retrieve',

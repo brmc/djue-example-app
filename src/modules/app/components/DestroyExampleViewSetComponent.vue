@@ -1,35 +1,17 @@
-<template>
-  <div>
-    <div v-if="confirmDelete">
-      <p> Are you sure you would like to delete this object?</p>
-      <a href="#" @click="remove">Yes</a>
-      <a href="#" @click="confirmDelete=false">No</a>
-    </div>
-    <div v-else>
-      <input type='button' @click="confirmDelete=true"
-             value="Delete"/>
-    </div>
-  </div>
-</template>
-
 <script>
+  import Vue from 'vue'
   import { mapState, mapActions } from 'vuex'
 
-  export default {
+  import DestroyViewSetComponent from '../../../components/DestroyViewSetComponent'
+
+  export default Vue.extend({
+    mixins: [DestroyViewSetComponent],
     data () {
       return {
-        confirmDelete: false,
+        namespace: 'app/Example',
       }
     },
-    watch: {
-      $route () {
-        this.confirmDelete = false
-      },
-    },
     computed: {
-      ...mapState('app/Example', {
-        object: state => state.objects.active,
-      }),
       routeDescription () {
         return {
           name: 'example-detail',
@@ -39,16 +21,7 @@
         }
       },
     },
-    methods: {
-      ...mapActions('app/Example', [
-        'destroy',
-      ]),
-      remove () {
-        this.destroy(this.routeDescription)
-      },
-    },
-  }
-
+  })
 </script>
 
 <style>

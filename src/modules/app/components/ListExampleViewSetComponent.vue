@@ -33,9 +33,6 @@ export default {
     }
   },
   created() {
-    console.log("Suck dick")
-    let a = Vue
-
     this.list(this.routeDescription)
   },
   watch: {
