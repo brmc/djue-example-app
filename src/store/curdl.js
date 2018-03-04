@@ -3,19 +3,31 @@ import api from './api'
 function list ({commit, state}, path) {
   return api.get(path)
       .then(response => commit('LOAD_ALL', response))
-      .catch(error => alert('error', error))
+      .catch(error => {
+        commit('LOAD_ERRORS', error);
+        return error
+      })
 }
 
 function retrieve ({commit, state}, path) {
   return api.get(path)
       .then(response => commit('LOAD_ONE', response))
-      .catch(error => alert('error', error))
+      .catch(error => {
+        commit('LOAD_ERRORS', error)
+        return error
+      })
 }
 
 function create ({commit, state}, {url, payload}) {
   return api.post(url, payload)
-      .then(response => {commit('LOAD_ONE', response); return response})
-      .catch(error => {commit('LOAD_ERRORS', error); return error})
+      .then(response => {
+        commit('LOAD_ONE', response)
+        return response
+      })
+      .catch(error => {
+        commit('LOAD_ERRORS', error)
+        return error
+      })
 }
 
 function update ({commit, state}, {url, payload}) {
@@ -46,5 +58,5 @@ export {
   destroy,
   list,
   softCommit,
-  resetNew
+  resetNew,
 }

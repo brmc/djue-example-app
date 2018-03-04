@@ -1,11 +1,17 @@
 <template>
   <div>
-    <destroy-example-view-set-component></destroy-example-view-set-component>
-    <retrieve-example-view-set-component
-        v-if="!edit"></retrieve-example-view-set-component>
-    <update-example-serializer v-else></update-example-serializer>
-    <a v-if="edit" href="#" @click="edit = false">Cancel</a>
-    <a v-else href="#" @click="edit = true">Edit</a>
+    <div v-if="errors" v-for="error in errors">
+      {{error}}
+    </div>
+    <div >
+      <retrieve-example-view-set-component v-if="!edit" />
+      <update-example-serializer v-else />
+      <a v-if="edit" href="#" @click="edit = false">Cancel</a>
+      <a v-else href="#" @click="edit = true">Edit</a>
+
+      <destroy-example-view-set-component/>
+
+    </div>
   </div>
 </template>
 
@@ -25,6 +31,7 @@
     computed: {
       ...mapState('app/Example', {
         object: state => state.objects.active,
+        errors: state => state.errors
       }),
       routeDescription () {
         return {
