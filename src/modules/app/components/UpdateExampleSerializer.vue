@@ -4,10 +4,13 @@
       <div v-if="!object">...Loading</div>
       <div v-else="">
         <p>
-          <!--<label for="id_name">Name:</label>-->
-          <input placeholder="Name" type="text" name="name"
-                 v-model="object.name.value" maxlength="50"
-                 required id="id_name"/>
+          <input required
+                 v-model="object.name.value"
+                 placeholder="Name"
+                 type="text"
+                 name="name"
+                 maxlength="50"
+                 id="id_name"/>
         <div v-if="object.name.errors">
           <div v-for="error in object.name.errors">
             {{ error }}
@@ -15,8 +18,11 @@
         </div>
         </p>
         <p><!--<label for="id_description">Description:</label>-->
-          <textarea placeholder="Description" name="description" cols="40"
-                    rows="10" required
+          <textarea required
+                    placeholder="Description"
+                    name="description"
+                    cols="40"
+                    rows="10"
                     id="id_description"
                     v-model="object.description.value"></textarea>
         <div v-if="object.description.errors">
@@ -27,20 +33,18 @@
         </p>
 
         <input type='button' @click="save" value="Save"/>
-        <input type='button' @click="revert" value="Revert"/>
+        <input type='button' @click="undo" value="Undo"/>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-  import { mapGetters, mapActions, mapState } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     data () {
       return {
-        name: null,
-        description: null,
         confirmDelete: false,
       }
     },
@@ -69,6 +73,7 @@
       ...mapActions('app/Example', [
         'update',
         'retrieve',
+        'revert',
       ]),
       save () {
         const payload = {}
@@ -78,8 +83,8 @@
 
         this.update({url: this.routeDescription, payload: payload})
       },
-      revert () {
-        this.$store.dispatch('MODEL_EXAMPLE_REVERT')
+      undo () {
+        this.revert(this.object.id.value)
       },
     },
   }

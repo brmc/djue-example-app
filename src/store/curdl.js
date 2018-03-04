@@ -51,6 +51,10 @@ function resetNew ({commit, state}) {
   commit('RESET_NEW', state)
 }
 
+function revert({commit}, id) {
+  commit('REVERT', id)
+}
+
 export {
   create,
   update,
@@ -59,4 +63,5 @@ export {
   list,
   softCommit,
   resetNew,
+  revert
 }

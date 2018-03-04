@@ -22,17 +22,14 @@
       }
     },
     computed: {
-        ...mapState({
-          object(state) {
-            return state.app.Example.objects.active
-          }
-        }),
-        ...mapGetters({
-          objsect(state, getters) {
-            console.log(getters)
-            return getters['app']['Example'].getActive
-          }
-        })
+      routeDescription () {
+        return {
+          name: this.routeName,
+          params: {
+            pk: this.object.id.value,
+          },
+        }
+      },
     },
     watch: {
       $route () {

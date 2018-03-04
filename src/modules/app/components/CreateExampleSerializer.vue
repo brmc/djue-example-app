@@ -7,18 +7,23 @@
     <form v-else action="." method="post">
       <div>
         <p>
-          <!--<label for="id_name">Name:</label>-->
-          <input placeholder="Name" type="text" name="name"
-                 v-model="object.name.value" maxlength="50"
-                 required id="id_name"/>
+          <input required
+                 v-model="object.name.value"
+                 placeholder="Name"
+                 type="text"
+                 name="name"
+                 maxlength="50"
+                 id="id_name"/>
         <div v-if="object.name.errors">
           <div v-for="error in object.name.errors">
             {{ error }}
           </div>
         </div>
         </p>
-        <p><!--<label for="id_description">Description:</label>-->
-          <textarea placeholder="Description" name="description" cols="40"
+        <p>
+          <textarea placeholder="Description"
+                    name="description"
+                    cols="40"
                     rows="10" required
                     id="id_description"
                     v-model="object.description.value"></textarea>
@@ -32,7 +37,6 @@
         </p>
 
         <input type='button' @click="save" value="Save"/>
-        <input type='button' @click="revert" value="Revert"/>
       </div>
     </form>
   </div>
@@ -60,7 +64,6 @@
         'resetNew',
       ]),
       createAnother () {
-        this.resetNew()
         this.created = false
       }
       ,
@@ -74,16 +77,9 @@
             .then(response => {
               if (response.status === 201) {
                 this.created = true
+                this.resetNew()
               }
             })
-      },
-
-      remove () {
-        this.$store.commit('MODEL_EXAMPLE_DELETE')
-      },
-
-      revert () {
-        this.$store.dispatch('MODEL_EXAMPLE_REVERT')
       },
     },
   }

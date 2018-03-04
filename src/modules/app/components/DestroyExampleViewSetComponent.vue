@@ -1,6 +1,6 @@
 <script>
   import Vue from 'vue'
-  import { mapState, mapActions } from 'vuex'
+  import { mapState } from 'vuex'
 
   import DestroyViewSetComponent from '../../../components/DestroyViewSetComponent'
 
@@ -9,20 +9,13 @@
     data () {
       return {
         namespace: 'app/Example',
+        routeName: 'example-detail',
       }
     },
     computed: {
-      routeDescription () {
-        return {
-          name: 'example-detail',
-          params: {
-            pk: this.object.id.value,
-          },
-        }
-      },
+      ...mapState('app/Example', {
+        object: state => state.objects.active,
+      }),
     },
   })
 </script>
-
-<style>
-</style>
