@@ -14,7 +14,9 @@
     },
     computed: {
       ...mapState('app/Example', {
-        object: state => state.objects.active,
+        object: function (state) {
+          return state.objects.all[this.$route.params.pk]
+        }
       }),
     },
   })

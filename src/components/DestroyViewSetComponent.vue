@@ -2,12 +2,12 @@
   <div>
     <div v-if="confirmDelete">
       <p> Are you sure you would like to delete this object?</p>
-      <a href="#" @click="destroy">Yes</a>
-      <a href="#" @click="confirmDelete=false">No</a>
+      <a href="#" @click.prevent.stop="destroy">Yes</a>
+      <a href="#" @click.prevent.stop="confirmDelete=false">No</a>
     </div>
     <div v-else>
-      <input type='button' @click="confirmDelete=true"
-             value="Delete"/>
+      <a href="#" @click.prevent.stop="confirmDelete=true"
+         value="Delete"/>
     </div>
   </div>
 </template>

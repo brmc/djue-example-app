@@ -6,14 +6,13 @@ import {
   retrieve,
   destroy,
   update,
-  softCommit,
   resetNew,
-  revert
+  revert,
+  pushHtmlError,
 } from '../../../store/curdl'
 
 const state = {
   objects: {
-    active: null,
     all: {},
     master: {},
     errors: null,
@@ -47,12 +46,7 @@ const state = {
   },
 }
 
-const getters = {
-  getActiveOrNew (state) {
-    return state.objects.active || state.objects.new
-  },
-
-}
+const getters = {}
 
 const actions = {
   list,
@@ -60,13 +54,14 @@ const actions = {
   retrieve,
   destroy,
   update,
-  softCommit,
   resetNew,
-  revert
+  revert,
+  pushHtmlError,
 }
 
 function loadFieldErrors (state, data) {
-  let target = state.objects.active || state.objects.new
+  const objId = this.getters.getRoutePK
+  let target = state.objects.all[objId] || state.objects.new
 
   for (const [field, errors] of Object.entries(data)) {
     Vue.set(target[field], 'errors', errors)
@@ -85,12 +80,13 @@ const mutations = {
   LOAD_ERRORS (state, error) {
     const response = error.response
     const data = response.data
+
     switch (response.status) {
       case 400:
-        loadFieldErrors(state, data)
+        loadFieldErrors.call(this, state, data)
         break
       default:
-        loadGeneralErrors(state, Object.values(data))
+        loadGeneralErrors.call(this, state, Object.values(data))
     }
   },
   LOAD_ALL (state, response) {
@@ -122,20 +118,21 @@ const mutations = {
     }
 
     const objects = state.objects
-    objects.active = data
 
-    const id = data.id
+    const id = data.id.value
+
     let clone = JSON.parse(JSON.stringify(data))
-    Vue.set(objects.all, id.value, data)
-    Vue.set(objects.master, id.value, clone)
+    Vue.set(objects.all, id, data)
+    Vue.set(objects.master, id, clone)
     clearGeneralErrors(state)
   },
   REMOVE (state, response) {
+    const id = this.getters.getRoutePK
     const objects = state.objects
-    const id = objects.active.id.value
+    Vue.set(objects.all, id, null)
+    Vue.set(objects.master, id, null)
     delete objects.all[id]
     delete objects.master[id]
-    objects.active = null
     clearGeneralErrors(state)
   },
   REVERT (state, id) {
@@ -150,17 +147,14 @@ const mutations = {
     }
 
   },
-  REMOVE_ACTIVE_OBJECT (state) {
-    Vue.set(state.objects.all, state.objects.active.id.value,
-        state.objects.active)
-    state.objects.active = null
-    clearGeneralErrors(state)
-  },
   RESET_NEW (state) {
     for (let [name, field] of Object.entries(state.objects.new)) {
       Vue.set(field, 'value', '')
       Vue.set(field, 'errors', [])
     }
+  },
+  PUSH_FIELD_ERROR (state, {field, id, error}) {
+    state.objects.all[id][field].errors.push(error)
   },
 }
 

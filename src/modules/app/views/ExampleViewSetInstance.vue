@@ -6,8 +6,8 @@
     <div >
       <retrieve-example-view-set-component v-if="!edit" />
       <update-example-serializer v-else />
-      <a v-if="edit" href="#" @click="edit = false">Cancel</a>
-      <a v-else href="#" @click="edit = true">Edit</a>
+      <a href="#" v-if="edit"  @click.prevent.stop="edit = false">Cancel</a>
+      <a href="#" v-else @click.prevent.stop="edit = true">Edit</a>
 
       <destroy-example-view-set-component/>
 
@@ -30,7 +30,9 @@
     },
     computed: {
       ...mapState('app/Example', {
-        object: state => state.objects.active,
+        object: function (state) {
+          return state.objects.all[this.$route.params.pk]
+        },
         errors: state => state.errors
       }),
       routeDescription () {
@@ -50,13 +52,9 @@
     created () {
       this.retrieve(this.$route.path)
     },
-    destroyed () {
-      this.softCommit(this.object)
-    },
     methods: {
       ...mapActions('app/Example', [
         'retrieve',
-        'softCommit',
       ]),
     },
     components: {

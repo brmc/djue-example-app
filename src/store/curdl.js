@@ -4,7 +4,7 @@ function list ({commit, state}, path) {
   return api.get(path)
       .then(response => commit('LOAD_ALL', response))
       .catch(error => {
-        commit('LOAD_ERRORS', error);
+        commit('LOAD_ERRORS', error)
         return error
       })
 }
@@ -39,20 +39,27 @@ function update ({commit, state}, {url, payload}) {
 function destroy ({commit, state}, url) {
   return api.destroy(url)
       .then(response => commit('REMOVE', response))
-      .catch(error => commit('LOAD_ERRORS', error))
+      .catch(error => {
+        commit('LOAD_ERRORS', error)
+        return error
+      })
 
-}
-
-function softCommit ({commit, state}) {
-  commit('REMOVE_ACTIVE_OBJECT')
 }
 
 function resetNew ({commit, state}) {
   commit('RESET_NEW', state)
 }
 
-function revert({commit}, id) {
+function revert ({commit}, id) {
   commit('REVERT', id)
+}
+
+function pushHtmlError ({commit}, {field, id, error}) {
+  commit('PUSH_FIELD_ERROR', {field, id, error})
+}
+
+function validateField ({commit}, {field, id}) {
+  debugger
 }
 
 export {
@@ -61,7 +68,7 @@ export {
   retrieve,
   destroy,
   list,
-  softCommit,
   resetNew,
-  revert
+  revert,
+  pushHtmlError
 }

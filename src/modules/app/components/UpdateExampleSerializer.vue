@@ -5,10 +5,13 @@
       <div v-else="">
         <p>
           <input required
-                 v-model="object.name.value"
+                 gv-model="object.name.value"
+                 :value="object.name.value"
+                 @keyup="validate"
                  placeholder="Name"
                  type="text"
                  name="name"
+                 pattern="www"
                  maxlength="50"
                  id="id_name"/>
         <div v-if="object.name.errors">
@@ -32,8 +35,8 @@
         </div>
         </p>
 
-        <input type='button' @click="save" value="Save"/>
-        <input type='button' @click="undo" value="Undo"/>
+        <input type='button' @click.prevent.stop="save" value="Save"/>
+        <input type='button' @click.prevent.stop="undo" value="Undo"/>
       </div>
     </form>
   </div>
@@ -51,7 +54,9 @@
     computed: {
       ...mapState('app/Example', {
         'fields': 'fields',
-        object: state => state.objects.active,
+        object: function (state) {
+          return state.objects.all[this.$route.params.pk]
+        },
       }),
       routeDescription () {
         return {
@@ -62,18 +67,20 @@
         }
       },
     },
-    created () {
-      if (!this.object) {
+    /*created () {
+      /!*if (!this.object) {
         return
       }
-
+*!/
       this.retrieve(this.routeDescription)
-    },
+    },*/
     methods: {
       ...mapActions('app/Example', [
         'update',
         'retrieve',
         'revert',
+        'pushHtmlError',
+        'validateField',
       ]),
       save () {
         const payload = {}
@@ -86,9 +93,26 @@
       undo () {
         this.revert(this.object.id.value)
       },
+      validate (e) {
+        const field = e.target.name
+        const id = this.object.id.value
+        if (e.target.checkValidity()) {
+          //return this.validateField({field, id,})
+        }
+
+        this.pushHtmlError({
+          field: field,
+          id: id,
+          error: e.target.validationMessage,
+        })
+
+      },
     },
   }
 </script>
 
 <style>
+  input:invalid {
+    border: solid 1px red
+  }
 </style>

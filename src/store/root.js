@@ -19,6 +19,7 @@ let store = new Vuex.Store({
   plugins: [apiPlugin],
   state: {
     urls: [],
+    changes: []
   },
   modules: {
     app: AppStore,
@@ -28,6 +29,11 @@ let store = new Vuex.Store({
       api.get('/.json')
           .then((response) => commit('LOAD_ROOT', response.data))
     },
+  },
+  getters: {
+    getRoutePK: state => {
+      return state.route.params.pk
+    }
   },
   mutations: {
     LOAD_ROOT (state, response) {
