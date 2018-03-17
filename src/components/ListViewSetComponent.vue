@@ -29,7 +29,7 @@
     },
     computed: {
       ...mapState({
-        // no, you should not bind it here
+        // no, you should not bind this here
         stateModule,
         objects (state) {
           return this.stateModule.objects
