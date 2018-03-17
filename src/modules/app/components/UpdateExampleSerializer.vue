@@ -25,8 +25,9 @@
                     name="description"
                     cols="40"
                     rows="10"
+                    @keyup="validate"
                     id="id_description"
-                    v-model="object.description.value"></textarea>
+                    :value="object.description.value"></textarea>
         <div v-if="object.description.errors">
           <div v-for="error in object.description.errors">
             {{ error }}
@@ -101,6 +102,7 @@
       },
       validate (e) {
         const payload = {
+          object: this.object,
           field: e.target.name,
           id: this.object.id.value,
           value: e.target.value,

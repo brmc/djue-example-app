@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!object">...loading</div>
-    <div v-else v-for="(_, field) in fieldNames">{{ field }}: {{
+    <div v-else v-for="field in fieldNames">{{ field }}: {{
       object[field].value }}
     </div>
   </div>
@@ -11,7 +11,6 @@
   import { mapState, mapActions } from 'vuex'
 
   export default {
-
     data () {
       return {}
     },
@@ -20,7 +19,7 @@
         object: function (state) {
           return state.objects.all[this.$route.params.pk]
         },
-        fieldNames: state => state.fields,
+        fieldNames: state => Object.keys(state.fields),
       }),
     },
     methods: {

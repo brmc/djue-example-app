@@ -2,13 +2,14 @@
   <div>
     <div v-if="created">
       <div>{{ successMessage }}</div>
-      <a href="#" @click="createAnother">Create another?</a>
+      <a href="#" @click.stop.prevent="createAnother">Create another?</a>
     </div>
     <form v-else action="." method="post">
       <div>
         <p>
           <input required
-                 v-model="object.name.value"
+                 :value="object.name.value"
+                 @keyup="validate"
                  placeholder="Name"
                  type="text"
                  name="name"
@@ -21,12 +22,14 @@
         </div>
         </p>
         <p>
-          <textarea placeholder="Description"
+          <textarea required
+                    placeholder="Description"
                     name="description"
                     cols="40"
-                    rows="10" required
+                    rows="10"
+                    @keyup="validate"
                     id="id_description"
-                    v-model="object.description.value"></textarea>
+                    :value="object.description.value"></textarea>
         <div v-if="object.description.errors">
           <div v-for="error in object.description.errors">
 
@@ -36,7 +39,7 @@
         </div>
         </p>
 
-        <input type='button' @click="save" value="Save"/>
+        <input type='button' @click.prevent.stop="save" value="Save"/>
       </div>
     </form>
   </div>
@@ -54,23 +57,44 @@
     },
     computed: {
       ...mapState('app/Example', {
-        fields: 'fields',
+        fieldNames: state => Object.keys(state.fields),
         object: state => state.objects.new,
       }),
+      routeDescription () {
+        return {
+          name: 'example-list',
+        }
+      },
+    },
+    created () {
+      if (!this.object) {
+        return
+      }
     },
     methods: {
       ...mapActions('app/Example', [
         'create',
         'resetNew',
+          'validateField'
       ]),
       createAnother () {
         this.created = false
       }
       ,
-      save () {
+      save (e) {
         const payload = {}
-        for (const [name, _] of Object.entries(this.fields)) {
-          payload[name] = this.object[name].value
+        let isValid = true
+
+        this.fieldNames.forEach(fieldName => {
+          const field = this.object[fieldName]
+          if (field.errors.length > 0) {
+            isValid = false
+          }
+          payload[fieldName] = field.value
+        })
+
+        if (!isValid) {
+          return
         }
 
         this.create({url: this.$route.path, payload: payload})
@@ -81,11 +105,23 @@
               }
             })
       },
+      validate (e) {
+        const payload = {
+          object: this.object,
+          field: e.target.name,
+          id: this.object.id.value,
+          value: e.target.value,
+          error: e.target.validationMessage,
+        }
+        this.validateField({payload})
+      },
     },
   }
 
 </script>
 
 <style>
-
+  input:invalid {
+    border: solid 1px red
+  }
 </style>

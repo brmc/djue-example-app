@@ -158,7 +158,7 @@ const mutations = {
     }
   },
   VALIDATE_FIELD (state, {payload}) {
-    const {field, value, id, error} = payload
+    const {object, field, value, id, error} = payload
     let errors = error ? [error] : []
 
     const validators = state.fields[field].validators
@@ -171,7 +171,7 @@ const mutations = {
       }
     })
 
-    const obj = state.objects.all[id][field]
+    const obj = object[field]
 
     Vue.set(obj, 'value', value)
     Vue.set(obj, 'errors', errors)
