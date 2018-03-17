@@ -14,10 +14,12 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapState, mapActions } from 'vuex'
   import { areEqual } from '../util'
+  import stateModule from './StateModule'
 
-  export default {
+  export default Vue.extend({
     data () {
       return {
         loading: true,
@@ -27,10 +29,8 @@
     },
     computed: {
       ...mapState({
-        stateModule (state) {
-          this.namespace.split('/').forEach(n => state = state[n])
-          return state
-        },
+        // no, you should not bind it here
+        stateModule,
         objects (state) {
           return this.stateModule.objects
         },
@@ -79,7 +79,7 @@
         },
       }),
     },
-  }
+  })
 
 </script>
 
