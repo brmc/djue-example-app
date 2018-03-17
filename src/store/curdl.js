@@ -1,4 +1,5 @@
 import api from './api'
+import { areEqual } from '../util'
 
 function list ({commit, state}, path) {
   return api.get(path)
@@ -10,6 +11,14 @@ function list ({commit, state}, path) {
 }
 
 function retrieve ({commit, state}, path) {
+  const pk = path.params.pk
+  const local = state.objects.all[pk]
+  const master = state.objects.master[pk]
+  const fields = Object.keys(state.fieldNames)
+  if (local && master && !areEqual(local, master, fields)) {
+    return commit('LOAD_LOCAL', local)
+  }
+
   return api.get(path)
       .then(response => commit('LOAD_ONE', response))
       .catch(error => {
@@ -54,12 +63,8 @@ function revert ({commit}, id) {
   commit('REVERT', id)
 }
 
-function pushHtmlError ({commit}, {field, id, error}) {
-  commit('PUSH_FIELD_ERROR', {field, id, error})
-}
-
-function validateField ({commit}, {field, id}) {
-  debugger
+function validateField ({commit}, { payload }) {
+  commit('VALIDATE_FIELD', { payload })
 }
 
 export {
@@ -70,5 +75,5 @@ export {
   list,
   resetNew,
   revert,
-  pushHtmlError
+  validateField
 }

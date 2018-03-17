@@ -5,7 +5,6 @@
       <div v-else="">
         <p>
           <input required
-                 gv-model="object.name.value"
                  :value="object.name.value"
                  @keyup="validate"
                  placeholder="Name"
@@ -20,7 +19,7 @@
           </div>
         </div>
         </p>
-        <p><!--<label for="id_description">Description:</label>-->
+        <p>
           <textarea required
                     placeholder="Description"
                     name="description"
@@ -53,7 +52,7 @@
     },
     computed: {
       ...mapState('app/Example', {
-        'fields': 'fields',
+        fieldNames: state => Object.keys(state.fieldNames),
         object: function (state) {
           return state.objects.all[this.$route.params.pk]
         },
@@ -67,25 +66,32 @@
         }
       },
     },
-    /*created () {
-      /!*if (!this.object) {
+    created () {
+      if (!this.object) {
         return
       }
-*!/
-      this.retrieve(this.routeDescription)
-    },*/
+    },
     methods: {
       ...mapActions('app/Example', [
         'update',
         'retrieve',
         'revert',
-        'pushHtmlError',
         'validateField',
       ]),
-      save () {
+      save (e) {
         const payload = {}
-        for (const [name, _] of Object.entries(this.fields)) {
-          payload[name] = this.object[name].value
+        let isValid = true
+
+        this.fieldNames.forEach(fieldName => {
+          const field = this.object[fieldName]
+          if (field.errors.length > 0) {
+            isValid = false
+          }
+          payload[fieldName] = field.value
+        })
+
+        if (!isValid) {
+          return
         }
 
         this.update({url: this.routeDescription, payload: payload})
@@ -94,18 +100,13 @@
         this.revert(this.object.id.value)
       },
       validate (e) {
-        const field = e.target.name
-        const id = this.object.id.value
-        if (e.target.checkValidity()) {
-          //return this.validateField({field, id,})
-        }
-
-        this.pushHtmlError({
-          field: field,
-          id: id,
+        const payload = {
+          field: e.target.name,
+          id: this.object.id.value,
+          value: e.target.value,
           error: e.target.validationMessage,
-        })
-
+        }
+        this.validateField({payload})
       },
     },
   }

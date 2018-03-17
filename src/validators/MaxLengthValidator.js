@@ -1,6 +1,7 @@
 export default {
-  a: 1,
+  invalidMessage: "You must provide your own logic for this validator",
   validate() {
-    return true
+    console.warn(this.invalidMessage)
+    return [true, this.invalidMessage]
   },
 }

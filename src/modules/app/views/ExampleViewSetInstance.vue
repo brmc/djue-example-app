@@ -50,7 +50,7 @@
       },
     },
     created () {
-      this.retrieve(this.$route.path)
+      this.retrieve(this.$route)
     },
     methods: {
       ...mapActions('app/Example', [

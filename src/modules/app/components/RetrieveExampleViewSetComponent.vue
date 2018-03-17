@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!object">...loading</div>
-    <div v-else v-for="(_, field) in fields">{{ field }}: {{
+    <div v-else v-for="(_, field) in fieldNames">{{ field }}: {{
       object[field].value }}
     </div>
   </div>
@@ -20,7 +20,7 @@
         object: function (state) {
           return state.objects.all[this.$route.params.pk]
         },
-        fields: state => state.fields,
+        fieldNames: state => state.fieldNames,
       }),
     },
     methods: {

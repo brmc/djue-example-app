@@ -8,7 +8,7 @@ import {
   update,
   resetNew,
   revert,
-  pushHtmlError,
+  validateField,
 } from '../../../store/curdl'
 
 const state = {
@@ -56,7 +56,7 @@ const actions = {
   update,
   resetNew,
   revert,
-  pushHtmlError,
+  validateField,
 }
 
 function loadFieldErrors (state, data) {
@@ -126,6 +126,10 @@ const mutations = {
     Vue.set(objects.master, id, clone)
     clearGeneralErrors(state)
   },
+
+  LOAD_LOCAL (state, local) {
+    Vue.set(state.objects.all, local.id.value, local)
+  },
   REMOVE (state, response) {
     const id = this.getters.getRoutePK
     const objects = state.objects
@@ -153,8 +157,24 @@ const mutations = {
       Vue.set(field, 'errors', [])
     }
   },
-  PUSH_FIELD_ERROR (state, {field, id, error}) {
-    state.objects.all[id][field].errors.push(error)
+  VALIDATE_FIELD (state, {payload}) {
+    const {field, value, id, error} = payload
+    let errors = error ? [error] : []
+
+    const validators = state.fieldNames[field].validators
+
+    validators.forEach(validator => {
+      let [isValid, error] = validator.validate(value)
+
+      if (!isValid) {
+        errors.push(error)
+      }
+    })
+
+    const obj = state.objects.all[id][field]
+
+    Vue.set(obj, 'value', value)
+    Vue.set(obj, 'errors', errors)
   },
 }
 
