@@ -3,7 +3,7 @@
     <ul>
       <li v-for="object in objects.all">
         <router-link
-            :class="{invalid: hasErrors(object), changed: hasChanged(object)}"
+            :class="getClasses(object)"
             v-bind:to="getPath(object)">
           {{ object.name.value }}
           <span v-if="hasChanged(object)">(modified)</span>
@@ -18,7 +18,6 @@
   import { areEqual } from '../util'
 
   export default {
-
     data () {
       return {
         loading: true,
@@ -53,6 +52,12 @@
       //'$route': 'list',
     },
     methods: {
+      getClasses (object) {
+        return {
+          invalid: this.hasErrors(object),
+          changed: this.hasChanged(object),
+        }
+      },
       getPath (object) {
         return {name: this.detailRouteName, params: {pk: object.id.value}}
       },
@@ -63,9 +68,6 @@
       hasErrors (object) {
         for (const field of this.fieldNames) {
           if (object[field].errors.length > 0) {
-
-            console.log(field)
-            console.log(object[field].errors)
             return true
           }
         }
