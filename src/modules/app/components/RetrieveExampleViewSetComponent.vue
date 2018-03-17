@@ -20,7 +20,7 @@
         object: function (state) {
           return state.objects.all[this.$route.params.pk]
         },
-        fieldNames: state => state.fieldNames,
+        fieldNames: state => state.fields,
       }),
     },
     methods: {

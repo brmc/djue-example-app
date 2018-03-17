@@ -52,7 +52,7 @@
     },
     computed: {
       ...mapState('app/Example', {
-        fieldNames: state => Object.keys(state.fieldNames),
+        fieldNames: state => Object.keys(state.fields),
         object: function (state) {
           return state.objects.all[this.$route.params.pk]
         },

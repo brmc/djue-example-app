@@ -27,7 +27,7 @@
     computed: {
       ...mapState('app/Example', {
         objects: state => state.objects,
-        fieldNames: state => Object.keys(state.fieldNames),
+        fieldNames: state => Object.keys(state.fields),
       }),
       routeDescription () {
         return {

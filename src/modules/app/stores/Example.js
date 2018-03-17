@@ -161,7 +161,7 @@ const mutations = {
     const {field, value, id, error} = payload
     let errors = error ? [error] : []
 
-    const validators = state.fieldNames[field].validators
+    const validators = state.fields[field].validators
 
     validators.forEach(validator => {
       let [isValid, error] = validator.validate(value)
