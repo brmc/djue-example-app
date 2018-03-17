@@ -75,7 +75,7 @@
       ...mapActions('app/Example', [
         'create',
         'resetNew',
-          'validateField'
+        'validateField',
       ]),
       createAnother () {
         this.created = false
