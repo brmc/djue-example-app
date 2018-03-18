@@ -1,15 +1,6 @@
 import Vue from 'vue'
 import MaxLengthValidator from '../../../validators/MaxLengthValidator'
-import {
-  list,
-  create,
-  retrieve,
-  destroy,
-  update,
-  resetNew,
-  revert,
-  validateField,
-} from '../../../store/curdl'
+import curdlActions from '../../../store/curdl'
 
 const state = {
   objects: {
@@ -48,16 +39,7 @@ const state = {
 
 const getters = {}
 
-const actions = {
-  list,
-  create,
-  retrieve,
-  destroy,
-  update,
-  resetNew,
-  revert,
-  validateField,
-}
+const actions = Object.assign({}, curdlActions)
 
 function loadFieldErrors (state, data) {
   const objId = this.getters.getRoutePK
@@ -118,7 +100,6 @@ const mutations = {
     }
 
     const objects = state.objects
-
     const id = data.id.value
 
     let clone = JSON.parse(JSON.stringify(data))
@@ -126,7 +107,6 @@ const mutations = {
     Vue.set(objects.master, id, clone)
     clearGeneralErrors(state)
   },
-
   LOAD_LOCAL (state, local) {
     Vue.set(state.objects.all, local.id.value, local)
   },

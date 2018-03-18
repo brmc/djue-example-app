@@ -6,7 +6,7 @@
       <a href="#" @click.prevent.stop="confirmDelete=false">No</a>
     </div>
     <div v-else>
-      <a href="#" @click.prevent.stop="confirmDelete=true"
+      <input type="button" @click.prevent.stop="confirmDelete=true"
          value="Delete"/>
     </div>
   </div>

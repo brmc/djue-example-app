@@ -52,7 +52,6 @@ function destroy ({commit, state}, url) {
         commit('LOAD_ERRORS', error)
         return error
       })
-
 }
 
 function resetNew ({commit, state}) {
@@ -67,7 +66,7 @@ function validateField ({commit}, { payload }) {
   commit('VALIDATE_FIELD', { payload })
 }
 
-export {
+export default {
   create,
   update,
   retrieve,

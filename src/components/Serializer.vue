@@ -4,7 +4,7 @@
       <div>{{ successMessage }}</div>
       <a href="#" @click.stop.prevent="createAnother">Create another?</a>
     </div>
-    <form v-else action="." method="post">
+    <form action="." method="post">
       <p>
         <input required
                :value="object.name.value"
