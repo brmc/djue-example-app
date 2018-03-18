@@ -7,6 +7,10 @@
 
   export default Vue.extend({
     props: ['method', 'action', 'object'],
+    created() {
+      console.assert(this.namespace,
+          "You must set `data.namespace` when creating a Serializer")
+    },
     computed: {
       ...mapState({
         stateModule,
