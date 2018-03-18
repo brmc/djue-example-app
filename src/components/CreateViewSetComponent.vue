@@ -8,11 +8,11 @@
       </a>
     </div>
     <instance-form v-else
-                  :object="object"
-                  :method="create"
-                  :action='routeDescription'
-                  @reset="resetNew"
-                  @success="handleSuccess"/>
+                   :object="object"
+                   :method="create"
+                   :action='routeDescription'
+                   @reset="resetNew"
+                   @success="handleSuccess"/>
   </div>
 </template>
 
@@ -26,16 +26,18 @@
       return {
         objectName: 'Object',
         success: false,
-        successMessage: this.objectName + ' created successfully!',
       }
     },
     computed: {
-        ...mapState({
-          stateModule,
-          object(state) {
-            return this.stateModule.objects.new
-          }
-        }),
+      successMessage () {
+        return `${this.objectName} created successfully!`
+      },
+      ...mapState({
+        stateModule,
+        object (state) {
+          return this.stateModule.objects.new
+        },
+      }),
       routeDescription () {
         return {
           name: this.routeName,
@@ -43,19 +45,16 @@
       },
     },
     created () {
-      if (!this.object) {
-        return
-      }
+      if (!this.object) {}
     },
     methods: {
       ...mapActions({
-        create (dispatch, payload) {
-          dispatch(`${this.namespace}/create`, this.routeDescription,
-              payload)
+        create (dispatch, {url, payload}) {
+          return dispatch(`${this.namespace}/create`, {url, payload})
         },
-        resetNew(dispatch) {
-          dispatch(`${this.namespace}/resetNew`)
-        }
+        resetNew (dispatch) {
+          return dispatch(`${this.namespace}/resetNew`)
+        },
       }),
       createAnother () {
         this.success = false
