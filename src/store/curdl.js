@@ -41,8 +41,14 @@ function create ({commit, state}, {url, payload}) {
 
 function update ({commit, state}, {url, payload}) {
   return api.put(url, payload)
-      .then(response => commit('LOAD_ONE', response))
-      .catch(error => commit('LOAD_ERRORS', error))
+      .then(response => {
+        commit('LOAD_ONE', response)
+        return response
+      })
+      .catch(error => {
+        commit('LOAD_ERRORS', error)
+        return error
+      })
 }
 
 function destroy ({commit, state}, url) {
@@ -62,8 +68,8 @@ function revert ({commit}, id) {
   commit('REVERT', id)
 }
 
-function validateField ({commit}, { payload }) {
-  commit('VALIDATE_FIELD', { payload })
+function validateField ({commit}, {payload}) {
+  commit('VALIDATE_FIELD', {payload})
 }
 
 export default {
@@ -74,5 +80,5 @@ export default {
   list,
   resetNew,
   revert,
-  validateField
+  validateField,
 }

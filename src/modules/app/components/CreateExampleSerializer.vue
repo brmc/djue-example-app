@@ -2,58 +2,35 @@
   <div>
     <div v-if="success">
       <div>{{ successMessage }}</div>
-      <a href="#" @click.stop.prevent="createAnother">Create another?</a>
+      <a href="#"
+         @click.stop.prevent="createAnother">
+        Create another?
+      </a>
     </div>
-    <form v-else action="." method="post">
-      <p>
-        <input required
-               :value="object.name.value"
-               @keyup="validate"
-               placeholder="Name"
-               type="text"
-               name="name"
-               maxlength="50"
-               id="id_name"/>
-      <div v-if="object.name.errors">
-        <div v-for="error in object.name.errors">
-          {{ error }}
-        </div>
-      </div>
-      </p>
-      <p>
-          <textarea required
-                    placeholder="Description"
-                    name="description"
-                    cols="40"
-                    rows="10"
-                    @keyup="validate"
-                    id="id_description"
-                    :value="object.description.value"></textarea>
-      <div v-if="object.description.errors">
-        <div v-for="error in object.description.errors">
-          {{ error }}
-        </div>
-      </div>
-      </p>
-
-      <input type='button' @click.prevent.stop="save" value="Save"/>
-    </form>
+    <example-form v-else
+                  :object="object"
+                  :method="create"
+                  :action='routeDescription'
+                  @reset="resetNew"
+                  @success="handleSuccess"/>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapActions, mapState } from 'vuex'
+  import ExampleForm from './ExampleForm'
 
-  export default {
+  export default Vue.extend({
+    components: {ExampleForm},
     data () {
       return {
         success: false,
-        successMessage: 'Object created successfully!',
+        successMessage: 'Example created successfully!',
       }
     },
     computed: {
       ...mapState('app/Example', {
-        fieldNames: state => Object.keys(state.fields),
         object: state => state.objects.new,
       }),
       routeDescription () {
@@ -71,48 +48,16 @@
       ...mapActions('app/Example', [
         'create',
         'resetNew',
-        'validateField',
       ]),
       createAnother () {
         this.success = false
+      },
+      handleSuccess() {
+        this.success = true
+        this.resetNew()
       }
-      ,
-      save (e) {
-        const payload = {}
-        let isValid = true
-
-        this.fieldNames.forEach(fieldName => {
-          const field = this.object[fieldName]
-          if (field.errors.length > 0) {
-            isValid = false
-          }
-          payload[fieldName] = field.value
-        })
-
-        if (!isValid) {
-          return
-        }
-
-        this.create({url: this.$route.path, payload: payload})
-            .then(response => {
-              if (response.status === 201) {
-                this.success = true
-                this.resetNew()
-              }
-            })
-      },
-      validate (e) {
-        const payload = {
-          object: this.object,
-          field: e.target.name,
-          id: this.object.id.value,
-          value: e.target.value,
-          error: e.target.validationMessage,
-        }
-        this.validateField({payload})
-      },
     },
-  }
+  })
 
 </script>
 
