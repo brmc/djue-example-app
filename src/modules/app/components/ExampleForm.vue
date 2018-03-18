@@ -45,7 +45,7 @@
 
     data() {
       return {
-        namespaace: 'app/Example'
+        namespace: 'app/Example'
       }
     },
   })
