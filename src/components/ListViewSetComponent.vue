@@ -17,7 +17,7 @@
   import Vue from 'vue'
   import { mapState, mapActions } from 'vuex'
   import { areEqual } from '../util'
-  import stateModule from './StateModule'
+  import stateModule from '../util'
 
   export default Vue.extend({
     data () {

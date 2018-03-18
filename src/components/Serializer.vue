@@ -3,7 +3,7 @@
 <script>
   import Vue from 'vue'
   import { mapActions, mapState } from 'vuex'
-  import stateModule from './StateModule'
+  import stateModule from '../util'
 
   export default Vue.extend({
     props: ['method', 'action', 'object'],

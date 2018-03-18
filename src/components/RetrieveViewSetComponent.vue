@@ -9,7 +9,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import stateModule from './StateModule'
+  import stateModule from '../util'
 
   export default {
     computed: {

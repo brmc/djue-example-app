@@ -11,7 +11,7 @@
 
 <script>
   import { mapActions, mapState } from 'vuex'
-  import stateModule from './StateModule'
+  import stateModule from '../util'
 
   export default {
     data () {
@@ -63,7 +63,6 @@
         this.revert(this.object.id.value)
       },
     },
-
   }
 </script>
 
