@@ -1,6 +1,12 @@
 import api from './api'
 import { areEqual } from '../util'
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ * @param {string|Object} path can be a literal path or a vue route description
+ * @return {Promise<T>}
+ */
 function list ({commit, state}, path) {
   return api.get(path)
       .then(response => commit('LOAD_ALL', response))
@@ -10,6 +16,12 @@ function list ({commit, state}, path) {
       })
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ * @param {string|Object} path can be a literal path or a vue route description
+ * @return {Promise<T>}
+ */
 function retrieve ({commit, state}, path) {
   const pk = path.params.pk
   const local = state.objects.all[pk]
@@ -28,6 +40,13 @@ function retrieve ({commit, state}, path) {
       })
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ * @param {string|Object} url can be a literal path or a vue route description
+ * @param {Object} payload data to be json-encoded and sent to the server
+ * @return {Promise<T>}
+ */
 function create ({commit, state}, {url, payload}) {
   return api.post(url, payload)
       .then(response => {
@@ -40,6 +59,13 @@ function create ({commit, state}, {url, payload}) {
       })
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ * @param {string|Object} url can be a literal path or a vue route description
+ * @param {Object} payload data to be json-encoded and sent to the server
+ * @return {Promise<T>}
+ */
 function update ({commit, state}, {url, payload}) {
   return api.put(url, payload)
       .then(response => {
@@ -52,6 +78,12 @@ function update ({commit, state}, {url, payload}) {
       })
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ * @param {string|Object} url can be a literal path or a vue route description
+ * @return {Promise<T>}
+ */
 function destroy ({commit, state}, url) {
   return api.destroy(url)
       .then(response => commit('REMOVE', response))
@@ -61,14 +93,26 @@ function destroy ({commit, state}, url) {
       })
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} state
+ */
 function resetNew ({commit, state}) {
   commit('RESET_NEW', state)
 }
 
+/**
+ * @param {Function} commit
+ * @param {number} id
+ */
 function revert ({commit}, id) {
   commit('REVERT', id)
 }
 
+/**
+ * @param {Function} commit
+ * @param {Object} payload
+ */
 function validateField ({commit}, {payload}) {
   commit('VALIDATE_FIELD', {payload})
 }
