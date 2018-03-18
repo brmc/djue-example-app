@@ -4,8 +4,8 @@
       <a-p-i-root-view/>
     </div>
     <div class="grid">
-      <router-view name="nav"></router-view>
-      <router-view></router-view>
+      <router-view name="nav"/>
+      <router-view/>
     </div>
   </div>
 </template>
