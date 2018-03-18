@@ -4,7 +4,7 @@ import mutations from '../../../store/mutations'
 
 const state = {
   objects: {
-    all: {},
+    local: {},
     master: {},
     errors: null,
     new: {

@@ -24,7 +24,7 @@ function list ({commit, state}, path) {
  */
 function retrieve ({commit, state}, path) {
   const pk = path.params.pk
-  const local = state.objects.all[pk]
+  const local = state.objects.local[pk]
   const master = state.objects.master[pk]
   const fields = Object.keys(state.fields)
 

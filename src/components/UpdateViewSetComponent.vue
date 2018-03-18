@@ -27,7 +27,7 @@
       ...mapState({
         stateModule,
         object (state) {
-          return this.stateModule.objects.all[this.$route.params.pk]
+          return this.stateModule.objects.local[this.$route.params.pk]
         },
       }),
       routeDescription () {

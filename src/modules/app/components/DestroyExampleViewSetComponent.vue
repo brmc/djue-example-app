@@ -15,7 +15,7 @@
     computed: {
       ...mapState('app/Example', {
         object: function (state) {
-          return state.objects.all[this.$route.params.pk]
+          return state.objects.local[this.$route.params.pk]
         }
       }),
     },

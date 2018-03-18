@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 function loadFieldErrors (state, data) {
   const objId = this.getters.getRoutePK
-  let target = state.objects.all[objId] || state.objects.new
+  let target = state.objects.local[objId] || state.objects.new
 
   for (const [field, errors] of Object.entries(data)) {
     Vue.set(target[field], 'errors', errors)
@@ -44,7 +44,7 @@ export default {
       data[obj.id] = inner
     }
     let clone = JSON.parse(JSON.stringify(data))
-    Vue.set(state.objects, 'all', data)
+    Vue.set(state.objects, 'local', data)
     Vue.set(state.objects, 'master', clone)
     clearGeneralErrors(state)
   },
@@ -62,28 +62,28 @@ export default {
     const id = data.id.value
 
     let clone = JSON.parse(JSON.stringify(data))
-    Vue.set(objects.all, id, data)
+    Vue.set(objects.local, id, data)
     Vue.set(objects.master, id, clone)
     clearGeneralErrors(state)
   },
   LOAD_LOCAL (state, local) {
-    Vue.set(state.objects.all, local.id.value, local)
+    Vue.set(state.objects.local, local.id.value, local)
   },
   REMOVE (state, response) {
     const id = this.getters.getRoutePK
     const objects = state.objects
-    Vue.set(objects.all, id, null)
+    Vue.set(objects.local, id, null)
     Vue.set(objects.master, id, null)
-    delete objects.all[id]
+    delete objects.local[id]
     delete objects.master[id]
     clearGeneralErrors(state)
   },
   REVERT (state, id) {
     const objects = state.objects
-    const active = objects.all[id]
+    const active = objects.local[id]
     const original = objects.master[id]
     const clone = JSON.parse(JSON.stringify(original))
-    Vue.set(objects.all, id, clone)
+    Vue.set(objects.local, id, clone)
 
     for (let [name, field] of Object.entries(active)) {
       field.value = original[name].value

@@ -1,5 +1,3 @@
-import APIRootView from '../../modules/rest_framework/./views/APIRootView.vue'
-import ExampleViewSetList from './views/ExampleViewSetList.vue'
 import ListExampleViewSetComponent from './components/ListExampleViewSetComponent'
 import ExampleViewSetInstance from './views/ExampleViewSetInstance.vue'
 import CreateExampleSerializer from './components/CreateExampleSerializer'
