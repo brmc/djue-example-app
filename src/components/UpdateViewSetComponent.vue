@@ -2,10 +2,10 @@
   <div>
     <div v-if="success">{{successMessage}}</div>
     <instance-form :object="object"
-                  :method="update"
-                  :action='routeDescription'
-                  @reset="undo"
-                  @success="handleSuccess"/>
+                   :method="update"
+                   :action='routeDescription'
+                   @reset="undo"
+                   @success="handleSuccess"/>
   </div>
 </template>
 
@@ -16,16 +16,19 @@
   export default {
     data () {
       return {
+        objectName: 'Object',
         success: false,
-        successMessage: 'This Example was saved',
       }
     },
     computed: {
-        ...mapState({
-          stateModule,
-          object(state) {
-            return this.stateModule.objects.all[this.$route.params.pk]
-          }
+      successMessage () {
+        return `${this.objectName} was saved`
+      },
+      ...mapState({
+        stateModule,
+        object (state) {
+          return this.stateModule.objects.all[this.$route.params.pk]
+        },
       }),
       routeDescription () {
         return {
@@ -37,19 +40,22 @@
       },
     },
     created () {
-      if (!this.object) {
-        return
-      }
+      if (!this.object) {}
+    },
+    watch: {
+      $route (from, to) {
+        this.success = false
+      },
     },
     methods: {
-        ...mapActions({
-          update(dispatch, url, payload) {
-            dispatch(`${this.namespace}/update`, {url, payload})
-          },
-          revert(dispatch, id) {
-            dispatch(`${this.namespace}/revert`, id)
-          }
-        }),
+      ...mapActions({
+        update (dispatch, {url, payload}) {
+          return dispatch(`${this.namespace}/update`, {url, payload})
+        },
+        revert (dispatch, id) {
+          return dispatch(`${this.namespace}/revert`, id)
+        },
+      }),
       handleSuccess () {
         this.success = true
       },

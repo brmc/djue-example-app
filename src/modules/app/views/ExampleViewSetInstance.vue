@@ -46,6 +46,7 @@
     },
     watch: {
       '$route' (to, from) {
+        this.edit = false
         this.retrieve(to)
       },
     },

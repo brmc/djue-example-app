@@ -1,7 +1,7 @@
 <script>
   import Vue from 'vue'
-  import ExampleForm from './ExampleForm'
   import CreateViewSetComponent from '../../../components/CreateViewSetComponent'
+  import ExampleForm from './ExampleForm'
 
   export default Vue.extend({
     mixins: [CreateViewSetComponent],

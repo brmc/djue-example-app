@@ -21,7 +21,7 @@
   import { mapActions, mapState } from 'vuex'
   import stateModule from './StateModule'
 
-  export default Vue.extend({
+  export default {
     data () {
       return {
         objectName: 'Object',
@@ -56,16 +56,15 @@
           return dispatch(`${this.namespace}/resetNew`)
         },
       }),
-      createAnother () {
-        this.success = false
-      },
       handleSuccess () {
         this.success = true
         this.resetNew()
       },
+      createAnother () {
+        this.success = false
+      },
     },
-  })
-
+  }
 </script>
 
 <style>

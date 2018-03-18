@@ -3,9 +3,9 @@
     <button v-if="active !== 0" @click='activate(0)'>List</button>
     <button v-if="active !== 1" @click='activate(1)'>Create</button>
     <keep-alive>
-      <list-example-view-set-component v-if="active==0"/>
+      <list-example-view-set-component v-if="active === 0"/>
     </keep-alive>
-    <create-example-serializer v-if="active==1"></create-example-serializer>
+    <create-example-serializer v-if="active === 1"/>
   </div>
 </template>
 
