@@ -2,7 +2,6 @@ import Vuex from 'vuex'
 import AppStore from '../modules/app/stores/store'
 import api from './api'
 import Vue from 'vue'
-import router from '../router'
 
 Vue.use(Vuex)
 

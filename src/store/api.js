@@ -47,12 +47,12 @@ export default {
     url = buildPath(url)
     return axios.post(url, payload, config)
   },
-  destroy (url) {
-    url = buildPath(url)
-    return axios.delete(url, config)
-  },
   put (url, payload) {
     url = buildPath(url)
     return axios.put(url, payload, config)
+  },
+  destroy (url) {
+    url = buildPath(url)
+    return axios.delete(url, config)
   },
 }

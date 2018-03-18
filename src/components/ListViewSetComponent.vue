@@ -48,9 +48,6 @@
     created () {
       this.list(this.routeDescription)
     },
-    watch: {
-      //'$route': 'list',
-    },
     methods: {
       getClasses (object) {
         return {
@@ -90,5 +87,12 @@
 
   .changed {
     font-style: italic;
+    font-weight: bold;
+  }
+
+  .changed span {
+    font-size: smaller;
+    font-weight: normal;
+    text-decoration: none;
   }
 </style>

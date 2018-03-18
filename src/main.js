@@ -15,6 +15,7 @@ if (!window.location.origin) {
 }
 
 new Vue({
+  strict: true,
   el: '#app',
   router,
   store,

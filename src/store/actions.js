@@ -15,6 +15,7 @@ function retrieve ({commit, state}, path) {
   const local = state.objects.all[pk]
   const master = state.objects.master[pk]
   const fields = Object.keys(state.fields)
+
   if (local && master && !areEqual(local, master, fields)) {
     return commit('LOAD_LOCAL', local)
   }

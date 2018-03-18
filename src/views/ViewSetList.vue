@@ -17,6 +17,9 @@
       }
     },
     methods: {
+      /**
+       * @param {Number} i
+       */
       activate (i) {
         this.active = i
       },
