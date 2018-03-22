@@ -1,4 +1,3 @@
-import api from './api'
 import { areEqual } from '../util'
 
 /**
@@ -8,7 +7,7 @@ import { areEqual } from '../util'
  * @return {Promise<T>}
  */
 function list ({commit, state}, path) {
-  return api.get(path)
+  return this.$api.get(path)
       .then(response => commit('LOAD_ALL', response))
       .catch(error => {
         commit('LOAD_ERRORS', error)
@@ -32,7 +31,7 @@ function retrieve ({commit, state}, path) {
     return commit('LOAD_LOCAL', local)
   }
 
-  return api.get(path)
+  return this.$api.get(path)
       .then(response => commit('LOAD_ONE', response))
       .catch(error => {
         commit('LOAD_ERRORS', error)
@@ -41,6 +40,8 @@ function retrieve ({commit, state}, path) {
 }
 
 /**
+ * @property api $api
+ *
  * @param {Function} commit
  * @param {Object} state
  * @param {string|Object} url can be a literal path or a vue route description
@@ -48,7 +49,7 @@ function retrieve ({commit, state}, path) {
  * @return {Promise<T>}
  */
 function create ({commit, state}, {url, payload}) {
-  return api.post(url, payload)
+  return this.$api.post(url, payload)
       .then(response => {
         commit('LOAD_ONE', response)
         return response
@@ -67,7 +68,7 @@ function create ({commit, state}, {url, payload}) {
  * @return {Promise<T>}
  */
 function update ({commit, state}, {url, payload}) {
-  return api.put(url, payload)
+  return this.$api.put(url, payload)
       .then(response => {
         commit('LOAD_ONE', response)
         return response
@@ -85,7 +86,7 @@ function update ({commit, state}, {url, payload}) {
  * @return {Promise<T>}
  */
 function destroy ({commit, state}, url) {
-  return api.destroy(url)
+  return this.$api.destroy(url)
       .then(response => commit('REMOVE', response))
       .catch(error => {
         commit('LOAD_ERRORS', error)

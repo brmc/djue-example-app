@@ -18,21 +18,24 @@ let store = new Vuex.Store({
   plugins: [apiPlugin],
   state: {
     urls: [],
-    changes: []
+    changes: [],
   },
   modules: {
     app: AppStore,
   },
   actions: {
     loadRoot ({commit, state}) {
-      api.get('/.json')
-          .then((response) => commit('LOAD_ROOT', response.data))
+      this.$api.get('/.json')
+          .then((response) => {
+            commit('LOAD_ROOT', response.data)
+            return response
+          })
     },
   },
   getters: {
     getRoutePK: state => {
       return state.route.params.pk
-    }
+    },
   },
   mutations: {
     LOAD_ROOT (state, response) {
