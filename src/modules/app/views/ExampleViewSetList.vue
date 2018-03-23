@@ -2,8 +2,8 @@
   import Vue from 'vue'
 
   import ViewSetList from '../../../views/ViewSetList'
-  import ListExampleViewSetComponent from '.././components/ListExampleViewSetComponent.vue'
-  import CreateExampleSerializer from '.././components/CreateExampleSerializer'
+  import ListExampleViewSetComponent from '.././components/ExampleViewSetListComponent.vue'
+  import CreateExampleSerializer from '.././components/ExampleViewSetCreateComponent'
 
 export default Vue.extend({
   mixins: [ViewSetList],
