@@ -1,52 +1,42 @@
 <template>
   <form action="." method="post">
-    <p>
-      <input type="text"
-              name="name"
-              @keyup="validate"
-              placeholder="Name"
-              :value="object.name.value"
-              maxlength="50"
-              required
-              id="id_name"/>
-    <div v-if="object.name.errors">
-      <div v-for="error in object.name.errors">
-        {{ error }}
-      </div>
-    </div>
-    </p>
-    <p>
-      <textarea required
-                placeholder="Description"
-                name="description"
-                cols="40"
-                rows="10"
-                @keyup="validate"
-                id="id_description"
-                :value="object.description.value"></textarea>
-    <div v-if="object.description.errors">
-      <div v-for="error in object.description.errors">
-        {{ error }}
-      </div>
-    </div>
-    </p>
+  <p> <input type="text"
+       name="name"
+       @keyup="validate"
+       placeholder="Name"
+       :value="object.name.value" maxlength="50" required id="id_name" />
+<div v-if="object.name.errors">
+  <div v-for="error in object.name.errors">
+    {{ error }}
+  </div>
+</div></p>
+<p> <textarea name="description" cols="40" rows="10" required id="id_description"
+          placeholder="Description"
+          @keyup="validate"
+          :value="object.description.value">
+</textarea>
+<div v-if="object.description.errors">
+  <div v-for="error in object.description.errors">
+    {{ error }}
+  </div>
+</div></p>
 
-    <input type='button' @click.prevent.stop="save" value="Save"/>
-    <input type='button' @click.prevent.stop="$emit('reset')" value="reset"/>
-  </form>
+  <input type='button' @click.prevent.stop="save" value="Save"/>
+  <input type='button' @click.prevent.stop="$emit('reset')" value="reset"/>
+</form>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import Serializer from '../../../components/Serializer'
+import Vue from 'vue'
+import Serializer from '../../../components/Serializer'
 
-  export default Vue.extend({
-    mixins: [Serializer],
+export default Vue.extend({
+  mixins: [Serializer],
 
-    data () {
-      return {
-        namespace: 'app/Example',
-      }
-    },
-  })
+  data() {
+    return {
+      namespace: 'app/Example'
+    }
+  },
+})
 </script>
