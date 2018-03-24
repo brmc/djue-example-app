@@ -1,14 +1,13 @@
 <script>
-  import Vue from 'vue'
-  import RetrieveViewSetComponent from '../../../components/RetrieveViewSetComponent'
+import Vue from 'vue'
+import RetrieveViewSetComponent from '../../../components/RetrieveViewSetComponent'
 
-  export default Vue.extend({
-    mixins: [RetrieveViewSetComponent],
-    data () {
-      return {
-        namespace: 'app/Example',
-      }
-    },
-  })
-
+export default Vue.extend({
+  mixins: [RetrieveViewSetComponent],
+  data () {
+    return {
+      namespace: 'app/Example',
+    }
+  },
+})
 </script>
