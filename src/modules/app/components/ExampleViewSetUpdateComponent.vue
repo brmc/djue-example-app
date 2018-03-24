@@ -1,11 +1,11 @@
 <script>
   import Vue from 'vue'
   import UpdateViewSetComponent from '../../../components/UpdateViewSetComponent'
-  import ExampleForm from './ExampleForm'
+  import ExampleSerializer from './ExampleSerializer'
 
   export default Vue.extend({
     mixins: [UpdateViewSetComponent],
-    components: {InstanceForm: ExampleForm},
+    components: {InstanceForm: ExampleSerializer},
     data () {
       return {
         namespace: 'app/Example',
