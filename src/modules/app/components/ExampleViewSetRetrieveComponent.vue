@@ -4,7 +4,7 @@ import RetrieveViewSetComponent from '../../../components/RetrieveViewSetCompone
 
 export default Vue.extend({
   mixins: [RetrieveViewSetComponent],
-  data () {
+  data() {
     return {
       namespace: 'app/Example',
     }
