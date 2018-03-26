@@ -1,6 +1,6 @@
 <template>
-  <form action="." method="post">
-  <p> <input type="text"
+  <form @submit.prevent="save" action="." method="post">
+  <div> <input type="text"
        name="name"
        @keyup="validate"
        placeholder="Name"
@@ -9,8 +9,8 @@
   <div v-for="error in object.name.errors">
     {{ error }}
   </div>
-</div></p>
-<p> <textarea name="description" cols="40" rows="10" required id="id_description"
+</div></div>
+<div> <textarea name="description" cols="40" rows="10" required id="id_description"
           placeholder="Description"
           @keyup="validate"
           :value="object.description.value">
@@ -19,9 +19,9 @@
   <div v-for="error in object.description.errors">
     {{ error }}
   </div>
-</div></p>
+</div></div>
 
-  <input type='button' @click.prevent.stop="save" value="Save"/>
+  <input type='submit' value="Save"/>
   <input type='button' @click.prevent.stop="$emit('reset')" value="reset"/>
 </form>
 </template>
