@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-for="object in objects.local">
+      <li v-for="object in objects.local" :key="object.id.value">
         <router-link
             :class="getClasses(object)"
             v-bind:to="getPath(object)">
